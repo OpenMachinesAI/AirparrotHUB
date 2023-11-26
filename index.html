@@ -1,1 +1,121 @@
-hubby bubby
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AirparrotHUB</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+        }
+
+        #background {
+            background: url('https://i.ibb.co/qnWNyvm/IMG-6343.jpg') no-repeat center center fixed;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+            height: 100%;
+        }
+
+        #menu {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            display: none;
+        }
+
+        .icon {
+            margin: 10px;
+            padding: 10px;
+            border-radius: 50%;
+            background: #FFF;
+            color: #000;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .submenu {
+            display: none;
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        .close {
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="background" onclick="toggleMenu()">
+        <!-- Background image will be set via CSS -->
+    </div>
+    <div id="menu">
+        <div class="icon" onclick="sleepMode()">Sleep</div>
+        <div class="icon" onclick="showSubmenu('infoPage')">Information</div>
+        <div class="icon" onclick="showSubmenu('supportPage')">Support</div>
+        <div class="icon" onclick="checkUpdates()">Update</div>
+    </div>
+    <div id="infoPage" class="submenu">
+        <h1>AirparrotHUB</h1>
+        <p>Version 1.0</p>
+        <p>Made by sa.lex</p>
+        <div class="close" onclick="hideSubmenu('infoPage')">X</div>
+    </div>
+    <div id="supportPage" class="submenu">
+        <p>Email: alexosthebestnet@gmail.com</p>
+        <p>Feel free to contact Alex for any questions.</p>
+        <div class="close" onclick="hideSubmenu('supportPage')">X</div>
+    </div>
+    <script>
+        function toggleMenu() {
+    var menu = document.getElementById('menu');
+    var background = document.getElementById('background');
+    if (menu.style.display === 'block') {
+        menu.style.display = 'none';
+        background.style.filter = '';
+    } else {
+        menu.style.display = 'block';
+        background.style.filter = 'blur(8px)';
+    }
+}
+
+        function sleepMode() {
+            var background = document.getElementById('background');
+            background.style.background = '#000';
+            setTimeout(function() {
+                background.style.background = 'url(\'https://i.ibb.co/JvG2dGd/IMG-6344.jpg\') no-repeat center center fixed';
+                background.style.backgroundSize = 'cover';
+            }, 2000);
+            toggleMenu();
+        }
+
+        function showSubmenu(submenuId) {
+            document.getElementById(submenuId).style.display = 'block';
+            toggleMenu();
+        }
+
+        function hideSubmenu(submenuId) {
+            document.getElementById(submenuId).style.display = 'none';
+        }
+
+        function checkUpdates() {
+            window.open('', '_blank');
+        }
+    </script>
+</body>
+</html>
+
