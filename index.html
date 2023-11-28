@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AirparrotHUB</title>
     <style>
+        /* Existing and additional styles combined */
         body, html {
             margin: 0;
             padding: 0;
             height: 100%;
             font-family: Arial, sans-serif;
         }
-
         #background {
             background: url('https://i.ibb.co/qnWNyvm/IMG-6343.jpg') no-repeat center center fixed;
             -webkit-background-size: cover;
@@ -20,13 +20,12 @@
             background-size: cover;
             height: 100%;
         }
-
         .menu, .submenu {
             position: fixed;
             width: 100%;
             height: 100%;
             top: 0;
-            left: -100%; /* Start offscreen */
+            left: -100%;
             background: rgba(255, 255, 255, 0.9);
             z-index: 10;
             display: flex;
@@ -35,11 +34,9 @@
             justify-content: center;
             transition: left 0.5s;
         }
-
         .menu.active, .submenu.active {
-            left: 0; /* Slide in */
+            left: 0;
         }
-
         .icon, .back-button {
             margin: 20px;
             padding: 20px;
@@ -51,31 +48,41 @@
             opacity: 0;
             animation: popIn 0.5s forwards;
         }
-
-        /* Animation for icons popping in */
         @keyframes popIn {
             0% { transform: scale(0); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
         }
-
-        /* Delay animation for each icon */
         .icon:nth-child(1) { animation-delay: 0.1s; }
         .icon:nth-child(2) { animation-delay: 0.2s; }
         .icon:nth-child(3) { animation-delay: 0.3s; }
         .icon:nth-child(4) { animation-delay: 0.4s; }
-
         .back-button {
             position: absolute;
             top: 20px;
             left: 20px;
             z-index: 100;
         }
+        /* Additional styles for settings buttons */
+        #settingsMenu p, #eyeColorCustomization button {
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            display: inline-block;
+            margin: 4px 2px;
+            transition-duration: 0.4s;
+            border-radius: 5px;
+        }
+        #settingsMenu p:hover, #eyeColorCustomization button:hover {
+            background-color: #e0e0e0;
+        }
     </style>
 </head>
 <body>
-<div id="background" onclick="toggleMenu()">
-    <!-- Background image set via CSS -->
-</div>
+    <div id="background" onclick="toggleMenu()">
+        <!-- Background image set via CSS -->
+    </div>
 
     <div id="menu" class="menu">
         <div class="icon" onclick="sleepMode()">Sleep</div>
@@ -89,6 +96,14 @@
         <h1>Settings</h1>
         <p onclick="showInfo()">Information</p>
         <p onclick="checkForUpdates()">Check for Updates</p>
+        <p onclick="showEyeColorCustomization()">Eye Color</p>
+    </div>
+
+    <div id="eyeColorCustomization" class="submenu">
+        <div class="back-button" onclick="hideEyeColorCustomization()">Back</div>
+        <h1>Eye Color Customization</h1>
+        <input type="color" id="eyeColorPicker" name="eyeColor" value="#ffffff">
+        <button onclick="changeEyeColor()">Apply</button>
     </div>
 
     <div id="supportMenu" class="submenu">
@@ -107,10 +122,11 @@
         function sleepMode() {
             var background = document.getElementById('background');
             background.style.background = '#000';
-            setTimeout(function() {
+            background.onclick = function() {
                 background.style.background = 'url(\'https://i.ibb.co/JvG2dGd/IMG-6344.jpg\') no-repeat center center fixed';
                 background.style.backgroundSize = 'cover';
-            }, 5000); // Change to the URL of your normal background
+                background.onclick = toggleMenu;
+            };
             toggleMenu();
         }
 
@@ -137,12 +153,68 @@
         }
 
         function goHome() {
-            // Hide all menus
             hideSettings();
             hideSupport();
+            hideEyeColorCustomization();
             var menu = document.getElementById('menu');
             menu.classList.remove('active');
         }
+
+        function showEyeColorCustomization() {
+            var eyeColorMenu = document.getElementById('eyeColorCustomization');
+            eyeColorMenu.classList.add('active');
+            toggleMenu();
+        }
+
+        function hideEyeColorCustomization() {
+            var eyeColorMenu = document.getElementById('eyeColorCustomization');
+            eyeColorMenu.classList.remove('active');
+        }
+
+        function changeEyeColor() {
+            var color = document.getElementById('eyeColorPicker').value;
+            applyEyeColor(color);
+            localStorage.setItem('eyeColor', color);
+            hideEyeColorCustomization();
+        }
+
+        function applyEyeColor(color) {
+    // Convert hex color to RGB
+    var rgb = hexToRgb(color);
+
+    // Apply a combination of filters to tint the white areas
+    document.getElementById('background').style.filter = 
+        `drop-shadow(0 0 0 rgb(${rgb.r}, ${rgb.g}, ${rgb.b})) 
+         brightness(0) saturate(100%)`;
+}
+
+function hexToRgb(hex) {
+    var r = parseInt(hex.substring(1, 3), 16);
+    var g = parseInt(hex.substring(3, 5), 16);
+    var b = parseInt(hex.substring(5, 7), 16);
+    return { r, g, b };
+}
+
+
+        function initializeEyeColor() {
+            var savedColor = localStorage.getItem('eyeColor');
+            if (savedColor) {
+                applyEyeColor(savedColor);
+            }
+        }
+
+        // Additional placeholder functions
+        function showInfo() {
+            // Placeholder for information functionality
+            alert('Information not yet implemented.');
+        }
+
+        function checkForUpdates() {
+            // Placeholder for update check functionality
+            alert('Check for updates not yet implemented.');
+        }
+
+        window.onload = initializeEyeColor;
     </script>
 </body>
 </html>
