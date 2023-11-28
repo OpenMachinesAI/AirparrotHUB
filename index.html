@@ -21,77 +21,88 @@
             height: 100%;
         }
 
-        #menu {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            display: none;
+        .menu, .submenu {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: -100%; /* Start offscreen */
+            background: rgba(255, 255, 255, 0.9);
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: left 0.5s;
         }
 
-        .icon {
-            margin: 10px;
-            padding: 10px;
+        .menu.active, .submenu.active {
+            left: 0; /* Slide in */
+        }
+
+        .icon, .back-button {
+            margin: 20px;
+            padding: 20px;
             border-radius: 50%;
             background: #FFF;
             color: #000;
             display: inline-block;
             cursor: pointer;
+            opacity: 0;
+            animation: popIn 0.5s forwards;
         }
 
-        .submenu {
-            display: none;
-            position: absolute;
-            top: 20%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 15px;
+        /* Animation for icons popping in */
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
         }
 
-        .close {
-            cursor: pointer;
+        /* Delay animation for each icon */
+        .icon:nth-child(1) { animation-delay: 0.1s; }
+        .icon:nth-child(2) { animation-delay: 0.2s; }
+        .icon:nth-child(3) { animation-delay: 0.3s; }
+        .icon:nth-child(4) { animation-delay: 0.4s; }
+
+        .back-button {
             position: absolute;
-            top: 10px;
-            right: 10px;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
         }
     </style>
 </head>
 <body>
-    <div id="background" onclick="toggleMenu()">
-        <!-- Background image will be set via CSS -->
+    <div id="background">
+        <!-- Background image set via CSS -->
     </div>
-    <div id="menu">
+
+    <div id="menu" class="menu">
         <div class="icon" onclick="sleepMode()">Sleep</div>
-        <div class="icon" onclick="showSubmenu('infoPage')">Information</div>
-        <div class="icon" onclick="showSubmenu('supportPage')">Support</div>
-        <div class="icon" onclick="checkUpdates()">Update</div>
+        <div class="icon" onclick="showSettings()">Settings</div>
+        <div class="icon" onclick="showSupport()">Support</div>
+        <div class="icon" onclick="goHome()">Home</div>
     </div>
-    <div id="infoPage" class="submenu">
-        <h1>AirparrotHUB</h1>
-        <p>Version 1.0</p>
-        <p>Made by sa.lex</p>
-        <div class="close" onclick="hideSubmenu('infoPage')">X</div>
+
+    <div id="settingsMenu" class="submenu">
+        <div class="back-button" onclick="hideSettings()">Back</div>
+        <h1>Settings</h1>
+        <p onclick="showInfo()">Information</p>
+        <p onclick="checkForUpdates()">Check for Updates</p>
     </div>
-    <div id="supportPage" class="submenu">
+
+    <div id="supportMenu" class="submenu">
+        <div class="back-button" onclick="hideSupport()">Back</div>
+        <h1>Support</h1>
         <p>Email: alexosthebestnet@gmail.com</p>
         <p>Feel free to contact Alex for any questions.</p>
-        <div class="close" onclick="hideSubmenu('supportPage')">X</div>
     </div>
+
     <script>
         function toggleMenu() {
-    var menu = document.getElementById('menu');
-    var background = document.getElementById('background');
-    if (menu.style.display === 'block') {
-        menu.style.display = 'none';
-        background.style.filter = '';
-    } else {
-        menu.style.display = 'block';
-        background.style.filter = 'blur(8px)';
-    }
-}
+            var menu = document.getElementById('menu');
+            menu.classList.toggle('active');
+        }
 
         function sleepMode() {
             var background = document.getElementById('background');
@@ -99,23 +110,42 @@
             setTimeout(function() {
                 background.style.background = 'url(\'https://i.ibb.co/JvG2dGd/IMG-6344.jpg\') no-repeat center center fixed';
                 background.style.backgroundSize = 'cover';
-            }, 2000);
+            }, 5000); // Change to the URL of your normal background
             toggleMenu();
         }
 
-        function showSubmenu(submenuId) {
-            document.getElementById(submenuId).style.display = 'block';
+        function showSettings() {
+            var settingsMenu = document.getElementById('settingsMenu');
+            settingsMenu.classList.add('active');
             toggleMenu();
         }
 
-        function hideSubmenu(submenuId) {
-            document.getElementById(submenuId).style.display = 'none';
+        function hideSettings() {
+            var settingsMenu = document.getElementById('settingsMenu');
+            settingsMenu.classList.remove('active');
         }
 
-        function checkUpdates() {
-            window.open('', '_blank');
+        function showSupport() {
+            var supportMenu = document.getElementById('supportMenu');
+            supportMenu.classList.add('active');
+            toggleMenu();
         }
+
+        function hideSupport() {
+            var supportMenu = document.getElementById('supportMenu');
+            supportMenu.classList.remove('active');
+        }
+
+        function goHome() {
+            // Hide all menus
+            hideSettings();
+            hideSupport();
+            var menu = document.getElementById('menu');
+            menu.classList.remove('active');
+        }
+
+        // Initialize the menu when the page loads
+        window.onload = toggleMenu;
     </script>
 </body>
 </html>
-
