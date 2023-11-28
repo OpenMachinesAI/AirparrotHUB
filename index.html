@@ -73,9 +73,9 @@
     </style>
 </head>
 <body>
-    <div id="background">
-        <!-- Background image set via CSS -->
-    </div>
+<div id="background" onclick="toggleMenu()">
+    <!-- Background image set via CSS -->
+</div>
 
     <div id="menu" class="menu">
         <div class="icon" onclick="sleepMode()">Sleep</div>
@@ -143,9 +143,6 @@
             var menu = document.getElementById('menu');
             menu.classList.remove('active');
         }
-
-        // Initialize the menu when the page loads
-        window.onload = toggleMenu;
     </script>
 </body>
 </html>
