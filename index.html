@@ -3,10 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="AirparrotHUB">
-    <link rel="apple-touch-icon" href="touch-icon-iphone.png">
     <title>AirparrotHUB</title>
     <style>
         body, html {
@@ -14,90 +10,99 @@
             padding: 0;
             height: 100%;
             font-family: Arial, sans-serif;
-            background: url('your-background-image-url.jpg') no-repeat center center fixed;
+        }
+
+        #background {
+            background: url('https://i.ibb.co/qnWNyvm/IMG-6343.jpg') no-repeat center center fixed;
             -webkit-background-size: cover;
             -moz-background-size: cover;
             -o-background-size: cover;
             background-size: cover;
+            height: 100%;
         }
 
-        #menu {
-            display: none; /* Hide menu initially */
+        .menu, .submenu {
             position: fixed;
             width: 100%;
             height: 100%;
             top: 0;
-            left: 0;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .icon {
+            left: -100%; /* Start offscreen */
+            background: rgba(255, 255, 255, 0.9);
+            z-index: 10;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            margin: 10px;
-            padding: 10px;
+            transition: left 0.5s;
+        }
+
+        .menu.active, .submenu.active {
+            left: 0; /* Slide in */
+        }
+
+        .icon, .back-button {
+            margin: 20px;
+            padding: 20px;
             border-radius: 50%;
             background: #FFF;
             color: #000;
+            display: inline-block;
             cursor: pointer;
             opacity: 0;
             animation: popIn 0.5s forwards;
         }
 
-        .icon img {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-        }
-
-        .icon p {
-            margin-top: 8px;
-        }
-
+        /* Animation for icons popping in */
         @keyframes popIn {
             0% { transform: scale(0); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
         }
 
-        .icon:nth-child(1) { animation-delay: 0.2s; }
-        .icon:nth-child(2) { animation-delay: 0.4s; }
-        .icon:nth-child(3) { animation-delay: 0.6s; }
-        .icon:nth-child(4) { animation-delay: 0.8s; }
+        /* Delay animation for each icon */
+        .icon:nth-child(1) { animation-delay: 0.1s; }
+        .icon:nth-child(2) { animation-delay: 0.2s; }
+        .icon:nth-child(3) { animation-delay: 0.3s; }
+        .icon:nth-child(4) { animation-delay: 0.4s; }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+        }
     </style>
 </head>
-<body onclick="toggleMenu()">
-    <div id="menu">
-        <div class="icon" onclick="sleepMode(event)">
-            <img src="sleep-icon-url.png" alt="Sleep" />
-            <p>Sleep</p>
-        </div>
-        <div class="icon" onclick="showSettings(event)">
-            <img src="settings-icon-url.png" alt="Settings" />
-            <p>Settings</p>
-        </div>
-        <div class="icon" onclick="showSupport(event)">
-            <img src="support-icon-url.png" alt="Support" />
-            <p>Support</p>
-        </div>
-        <div class="icon" onclick="goHome(event)">
-            <img src="home-icon-url.png" alt="Home" />
-            <p>Home</p>
-        </div>
+<body>
+<div id="background" onclick="toggleMenu()">
+    <!-- Background image set via CSS -->
+</div>
+
+    <div id="menu" class="menu">
+        <div class="icon" onclick="sleepMode()">Sleep</div>
+        <div class="icon" onclick="showSettings()">Settings</div>
+        <div class="icon" onclick="showSupport()">Support</div>
+        <div class="icon" onclick="goHome()">Home</div>
     </div>
+
+    <div id="settingsMenu" class="submenu">
+        <div class="back-button" onclick="hideSettings()">Back</div>
+        <h1>Settings</h1>
+        <p onclick="showInfo()">Information</p>
+        <p onclick="checkForUpdates()">Check for Updates</p>
+    </div>
+
+    <div id="supportMenu" class="submenu">
+        <div class="back-button" onclick="hideSupport()">Back</div>
+        <h1>Support</h1>
+        <p>Email: alexosthebestnet@gmail.com</p>
+        <p>Feel free to contact Alex for any questions.</p>
+    </div>
+
     <script>
         function toggleMenu() {
             var menu = document.getElementById('menu');
-            if (menu.style.visibility === 'hidden') {
-                menu.style.visibility = 'visible';
-                menu.style.opacity = 1;
-            } else {
-                menu.style.visibility = 'hidden';
-                menu.style.opacity = 0;
-            }
+            menu.classList.toggle('active');
+        }
 
         function sleepMode() {
             var background = document.getElementById('background');
