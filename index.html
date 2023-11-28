@@ -235,10 +235,11 @@ function hideEyeImageCustomization() {
     document.getElementById('eyeImageCustomization').classList.remove('active');
 }
 
-window.onload = function() {
+
+window.addEventListener('DOMContentLoaded', (event) => {
     initializeSelectedEye();
     populateEyeChoices();
-};
+});
 
 
     
